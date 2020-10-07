@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment #Component Type
+metadata:
+  name: nginx-deployment #Deployment Name
+  labels: #Deployment Label
+    app: nginx
+spec: #Deployment Specifications
+  replicas: 2 # Number of Replicas
+  selector:
+    matchLabels: #It'll connect the Deployment to the Pod according to the "labels" value
+      app: nginx
+  template: #Blueprint for the Pod
+    metadata:
+      labels: #Pod Label
+        app: nginx
+    spec: #Pod Specifications
+      containers:
+      - name: nginx
+        image: nginx:1.16
+        ports:
+        - containerPort: 80
