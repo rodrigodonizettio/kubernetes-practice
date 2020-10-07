@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service #Component Type
+metadata:
+  name: nginx-service #Service Name
+spec: #Service Specifications
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080 #Must match with Pod "containerPort". It connects the Service to the Pods
