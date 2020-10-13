@@ -21,6 +21,12 @@ spec: #Deployment Specifications
         - containerPort: 27017 #Must match with Service "targetPort". It connects the Pods to the Service
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
-          value:
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret #Must match with the Secret "name" that is storing our MongoDB "username" and "password" environment variables
+              key: mongo-root-username #key in Secret YAML
         - name: MONGO_INITDB_ROOT_PASSWORD
-          value: 
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret #Must match with the Secret "name" that is storing our MongoDB "username" and "password" environment variables
+              key: mongo-root-password #key in Secret YAML
