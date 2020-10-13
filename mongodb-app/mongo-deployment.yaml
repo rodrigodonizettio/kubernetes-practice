@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment #Component Type
+metadata:
+  name: mongodb-deployment #Deployment Name
+  labels: #Deployment Label
+    app: mongodb
+spec: #Deployment Specifications
+  replicas: 1 # Number of Replicas
+  selector:
+    matchLabels: #It'll connect the Deployment to the Pod according to the "labels" value
+      app: mongodb
+  template: #Blueprint for the Pod
+    metadata:
+      labels: #Pod Label
+        app: mongodb
+    spec: #Pod Specifications
+      containers:
+      - name: mongodb
+        image: mongo
+        ports:
+        - containerPort: 27017 #Must match with Service "targetPort". It connects the Pods to the Service
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value:
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: 
