@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap #Component Type
+metadata:
+  name: mysql-configmap #ConfigMap Name
+  namespace: databases #This namespace will override the "default" namespace
+data: #The actual content in key-value pairs
+  database-url: mysql-service #It must match with the Service name (in this case, MySQL Service "name")
