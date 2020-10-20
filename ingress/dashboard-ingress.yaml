@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress #Component Type
+metadata:
+  name: dashboard-ingress #Ingress Name
+  namespace: kubernetes-dashboard #Must match with Service and Pod namespace
+spec: #Ingress Specifications
+  tls: #Configures a TLS Certificate (https)
+  - hosts:
+    - dashboard.com
+    secretName: dashboard-secret-tls #The Secret component that will hold the TLS Certificate (This name must match the "metadata:name" of the Secret)
+  rules: #Specifies the Routing Rules
+  - host: faq.dashboard.com #EXAMPLE OF MULTIPLE HOSTS WITH 1 PATH (Each host represents a subdomain)
+    http: #Specifies the Incoming Request Protocol
+      paths: #Specifies the mapping/rules of the URL suffix (after the host URL. e.g. dashboard.com/<paths>)
+        backend:
+          serviceName: faq-dashboard
+          servicePort: 4000
+  - host: dashboard.com #All requests to this URL will be forwarded to the Service inside "paths" specifications
+    http: #Specifies the Incoming Request Protocol
+      paths: #Specifies the mapping/rules of the URL suffix (after the host URL. e.g. dashboard.com/<paths>)
+      - path: /
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
+      - path: /support #It's just an example
+        backend:
+          serviceName: kubernetes-dashboard-support
+          servicePort: 3000
+        
