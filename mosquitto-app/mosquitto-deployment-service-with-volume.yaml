@@ -1,0 +1,36 @@
+#Mosquitto (Message Broker that implements MQTT) Deployment Document
+apiVersion: apps/v1
+kind: Deployment #Component Type
+metadata:
+  name: mosquitto-deployment #Deployment Name
+  labels: #Deployment Label
+    app: mosquitto
+spec: #Deployment Specifications
+  replicas: 1 #Number of Replicas
+  selector:
+    matchLabels: #It'll connect the Deployment to the Pod according to the "labels" value
+      app: mosquitto
+  template: #Blueprint for the Pod
+    metadata:
+      labels: #Pod Label
+        app: mosquitto
+    spec: #Pod Specifications
+      containers:
+        - name: mosquitto
+          image: eclipse-mosquitto:1.6.2
+          ports:
+            - containerPort: 1883 #Must match with Service "targetPort". It connects the Pods to the Service
+          volumeMounts: #Volumes to be mounted to persist data inside the Container
+            - name: mosquitto-config #Must match with the Pod volume#name
+              mountPath: /mosquitto/config #Where the volume will be mounted inside the container
+            - name: mosquitto-secret #Must match with the Pod volume#name
+              mountPath: /mosquitto/secret #Where the volume will be mounted inside the container
+              readOnly: true
+      volumes: #Volumes to be mounted to persist data inside the Pod. IMPORTANT: !!! They need to be mounted in the desired container !!!
+        - name: mosquitto-config #Volume name
+          configMap:
+            name: mosquitto-configmap-conf #Must match with the ConfigMap component metadata#name
+        - name: mosquitto-secret #Volume name
+          secret: 
+            secretName: mosquitto-secret-file #Must match with the Secret component metadata#name
+       
