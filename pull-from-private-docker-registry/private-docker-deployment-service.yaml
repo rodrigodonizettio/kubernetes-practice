@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment #Component Type
+metadata:
+  name: my-private-app #Deployment Name
+  labels: #Deployment Label
+    app: my-private-app
+spec: #Deployment Specifications
+  replicas: 1 #Number of Replicas
+  selector:
+    matchLabels: #It'll connect the Deployment to the Pod according to the "labels" value
+      app: my-private-app
+  template: #Blueprint for the Pod
+    metadata:
+      labels: #Pod Label
+        app: my-private-app
+    spec: #Pod Specifications
+      imagePullSecrets: #Adds a Secret reference to the Pod
+        - name: docker-secret #Must match to the secret name
+      containers:
+        - name: my-private-app
+          image: xyz.(...).eu-central-1.amazonaws.com/my-private-app:1.0 #Must have the complete Image URI from the Private Docker Repository/Registry
+          imagePullPolicy: Always #Forces to pull even it already exist in local machine
+          ports:
+            - containerPort: 3000 #Must match with Service "targetPort". It connects the Pods to the Service
